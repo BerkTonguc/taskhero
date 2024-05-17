@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Project</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .form-group label {
+            font-weight: 700;
+        }
+        .btn-primary {
+            width: 100%;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4">Add Project</h1>
+        <form action="{{ url_for('add_project') }}" method="POST">
+            <div class="form-group">
+                <label for="name">Project Name</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="start">Start Date</label>
+                <input type="date" class="form-control" id="start" name="start" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="end">End Date</label>
+                <input type="date" class="form-control" id="end" name="end" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="users">Project Users</label>
+                <select class="form-control" id="users" name="users" multiple size="3" required>
+                    {% for user in users %}
+                    <option value="{{ user.id }}">{{ user.username }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Add Project</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
