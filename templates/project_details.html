@@ -9,7 +9,7 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #f0f2f5;
+            background-color: #f8f9fa;
             margin: 0;
             padding: 20px;
             display: flex;
@@ -22,8 +22,8 @@
             max-width: 800px;
             background: white;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         h1, h2 {
             color: #333;
@@ -34,38 +34,41 @@
             padding: 0;
         }
         li {
-            padding: 10px;
-            margin: 5px 0;
-            background: #e7f1ff;
-            border-radius: 4px;
+            padding: 15px;
+            margin: 10px 0;
+            background: #e9ecef;
+            border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: background 0.3s;
+        }
+        li:hover {
+            background: #dee2e6;
         }
         .btn, .btn-delete, .btn-success, .btn-danger {
             display: inline-block;
             margin-left: 10px;
-            padding: 5px 10px;
+            padding: 10px 20px;
             background-color: #007bff;
             color: white;
             text-decoration: none;
-            border-radius: 4px;
+            border-radius: 8px;
             text-align: center;
-            min-width: 120px; /* Buton boyutunu sabitlemek için eklendi */
+            transition: background 0.3s;
         }
         .btn-success {
-            background-color: #28a745; /* Yeşil */
+            background-color: #28a745;
         }
         .btn-danger {
-            background-color: #dc3545; /* Kırmızı */
+            background-color: #dc3545;
         }
         .btn:hover, .btn-delete:hover, .btn-success:hover, .btn-danger:hover {
-            opacity: 0.8;
+            opacity: 0.9;
         }
         .btn-delete {
             background-color: #ff4444;
-            margin-left: 5px; /* Butonlar arasındaki mesafe */
         }
         .btn-delete:hover {
             background-color: #cc0000;
@@ -73,8 +76,10 @@
         a {
             color: #007bff;
             text-decoration: none;
+            transition: color 0.3s;
         }
         a:hover {
+            color: #0056b3;
             text-decoration: underline;
         }
         .action-buttons {
@@ -83,15 +88,14 @@
             margin-top: 20px;
         }
         .action-buttons a {
-            margin-right: 10px; /* Butonlar arasındaki boşluk */
-            min-width: 120px; /* Buton boyutunu sabitlemek için eklendi */
+            margin-right: 10px;
         }
         .project-users {
             margin-bottom: 20px;
             text-align: center;
         }
         .project-notes {
-            margin-top: 20px; /* Notes bölümünü biraz aşağıya kaydırmak için eklendi */
+            margin-top: 20px;
         }
         .project-notes form {
             display: flex;
@@ -102,7 +106,7 @@
         .project-notes form textarea {
             width: 70%;
             padding: 10px;
-            border-radius: 4px;
+            border-radius: 8px;
             border: 1px solid #ccc;
             margin-right: 10px;
         }
@@ -115,9 +119,9 @@
             flex-direction: column;
             justify-content: space-between;
             align-items: flex-start;
-            padding: 10px;
-            background: #e7f1ff;
-            border-radius: 4px;
+            padding: 15px;
+            background: #e9ecef;
+            border-radius: 8px;
             margin-bottom: 10px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
@@ -125,19 +129,19 @@
             list-style: none;
             padding: 0;
             margin-top: 10px;
-            display: none; /* Başlangıçta yorumları gizle */
+            display: none;
             width: 100%;
         }
         .comment-list.expanded {
-            display: block; /* Genişletildiğinde yorumları göster */
+            display: block;
         }
         .comment-list li {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 5px;
+            padding: 10px;
             background: #f0f2f5;
-            border-radius: 4px;
+            border-radius: 8px;
             margin-bottom: 5px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             width: 100%;
@@ -151,8 +155,8 @@
         }
         .comment-form textarea {
             width: 70%;
-            padding: 5px;
-            border-radius: 4px;
+            padding: 10px;
+            border-radius: 8px;
             border: 1px solid #ccc;
             margin-right: 10px;
         }
@@ -160,9 +164,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 5px;
+            padding: 10px;
             background: #f0f2f5;
-            border-radius: 4px;
+            border-radius: 8px;
             margin-bottom: 5px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             width: 100%;
@@ -205,7 +209,6 @@
             </li>
             {% endfor %}
         </ul>
-        <!-- Add Step and Back to Dashboard Buttons -->
         <div class="action-buttons">
             <a href="{{ url_for('add_step', project_id=project.id) }}" class="btn btn-primary">Add Step</a>
             <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
