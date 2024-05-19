@@ -1,3 +1,4 @@
 flask
 flasgger
 gunicorn
+flask_sqlalchemy
