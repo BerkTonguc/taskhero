@@ -66,7 +66,7 @@ class ProjectNote(db.Model):
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text, nullable=False)
-    note_id = db.Column(db.Integer, db.ForeignKey('project_note.id'), nullable=False)
+    note_id = db.Column(db.Integer, db.ForeignKey('project_note.id', ondelete='CASCADE'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     user = db.relationship('User', backref=db.backref('comments', lazy=True))
@@ -102,7 +102,8 @@ def logout():
 @login_required
 def dashboard():
     projects = Project.query.all()
-    return render_template('dashboard.html', projects=projects)
+    current_date = datetime.now().date()
+    return render_template('dashboard.html', projects=projects, current_date=current_date)
 
 @app.route('/add_project', methods=['GET', 'POST'])
 @login_required
@@ -141,6 +142,11 @@ def delete_note(note_id):
     if current_user.role != 'admin':
         return redirect(url_for('dashboard'))
     project_id = note.project_id
+
+    # Önce note ile ilişkili tüm yorumları sil
+    for comment in note.comments:
+        db.session.delete(comment)
+
     db.session.delete(note)
     db.session.commit()
     return redirect(url_for('project_details', project_id=project_id))
