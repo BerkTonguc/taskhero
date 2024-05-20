@@ -42,6 +42,7 @@ li {
     overflow: hidden; /* Taşan metni gizle */
     text-overflow: ellipsis; /* Taşan metni '...' ile belirt */
     white-space: nowrap; /* Metni tek satırda tut */
+    max-width: 100%; /* Taşmayı önlemek için maksimum genişlik belirle */
 }
 
 li:hover {
@@ -145,6 +146,7 @@ a:hover {
     overflow: hidden; /* Taşan metni gizle */
     text-overflow: ellipsis; /* Taşan metni '...' ile belirt */
     white-space: nowrap; /* Metni tek satırda tut */
+    max-width: 100%; /* Taşmayı önlemek için maksimum genişlik belirle */
 }
 
 .comment-list {

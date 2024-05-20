@@ -34,7 +34,7 @@
             padding: 0;
         }
         li {
-            padding: 15px;
+            padding: 10px;
             margin: 10px 0;
             background: #e9ecef;
             border-radius: 8px;
@@ -47,16 +47,18 @@
         li:hover {
             background: #dee2e6;
         }
-        .btn, .btn-delete, .btn-success, .btn-danger {
-            display: inline-block;
-            margin-left: 10px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
+        .btn, .btn-delete, .btn-success, .btn-danger, .btn-info {
+            margin: 0 5px;
+            padding: 5px 10px;
             text-decoration: none;
             border-radius: 8px;
             text-align: center;
             transition: background 0.3s;
+            color: white;
+            font-size: 12px;
+        }
+        .btn-info {
+            background-color: #17a2b8;
         }
         .btn-success {
             background-color: #28a745;
@@ -64,7 +66,10 @@
         .btn-danger {
             background-color: #dc3545;
         }
-        .btn:hover, .btn-delete:hover, .btn-success:hover, .btn-danger:hover {
+        .btn-primary {
+            background-color: #007bff;
+        }
+        .btn:hover, .btn-delete:hover, .btn-success:hover, .btn-danger:hover, .btn-info:hover, .btn-primary:hover {
             opacity: 0.9;
         }
         .btn-delete {
@@ -94,6 +99,17 @@
             margin-bottom: 20px;
             text-align: center;
         }
+        .project-users ul {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 0;
+        }
+        .project-users li {
+            margin: 5px 10px;
+            background: none;
+            box-shadow: none;
+        }
         .project-notes {
             margin-top: 20px;
         }
@@ -119,7 +135,7 @@
             flex-direction: column;
             justify-content: space-between;
             align-items: flex-start;
-            padding: 15px;
+            padding: 10px;
             background: #e9ecef;
             border-radius: 8px;
             margin-bottom: 10px;
@@ -176,9 +192,12 @@
             overflow: hidden;
             cursor: pointer;
             transition: max-height 0.3s ease;
+            max-width: 70%; /* Yorum genişliğini sınırla */
+            word-wrap: break-word; /* Kelimeleri kır */
         }
         .comment-content.expanded {
-            max-height: none;
+            white-space: normal; /* Genişletildiğinde metni normal şekilde gösterir */
+            max-width: none; /* Genişletildiğinde genişlik sınırlamasını kaldırır */
         }
     </style>
 </head>
@@ -227,12 +246,14 @@
                 {% for note in project.notes %}
                 <li>
                     <strong>{{ note.user.username }}:</strong> {{ note.content }}
-                    {% if current_user.role == 'admin' %}
-                    <form action="{{ url_for('delete_note', note_id=note.id) }}" method="POST" style="display: inline;">
-                        <button type="submit" class="btn-delete">Delete</button>
-                    </form>
-                    {% endif %}
-                    <button onclick="toggleComments({{ note.id }})" class="btn btn-info">View Comments</button>
+                    <div>
+                        {% if current_user.role == 'admin' %}
+                        <form action="{{ url_for('delete_note', note_id=note.id) }}" method="POST" style="display: inline;">
+                            <button type="submit" class="btn-delete">Delete</button>
+                        </form>
+                        {% endif %}
+                        <button onclick="toggleComments({{ note.id }})" class="btn btn-info">View Comments</button>
+                    </div>
                     <ul id="comment-list-{{ note.id }}" class="comment-list">
                         {% for comment in note.comments %}
                         <li class="comment">
@@ -262,6 +283,16 @@
                 textArea.addEventListener('input', () => {
                     if (textArea.value.length > 200) {
                         textArea.value = textArea.value.slice(0, 200);
+                    }
+                });
+            });
+
+            const inputs = document.querySelectorAll('input[type="text"]');
+
+            inputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    if (input.value.length > 150) {
+                        input.value = input.value.slice(0, 150);
                     }
                 });
             });
