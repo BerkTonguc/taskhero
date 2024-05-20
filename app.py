@@ -69,6 +69,7 @@ class Comment(db.Model):
     note_id = db.Column(db.Integer, db.ForeignKey('project_note.id', ondelete='CASCADE'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    user = db.relationship('User', backref=db.backref('comments', lazy=True))  # İlişki tanımı
 
 @login_manager.user_loader
 def load_user(user_id):
