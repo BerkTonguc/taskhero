@@ -60,7 +60,7 @@ class ProjectNote(db.Model):
     project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    user = db.relationship('User', backref=db.backref('notes', lazy=True))
+    user = db.relationship('User', backref=db.backref('notes', lazy=True))  # İlişki tanımı
     comments = db.relationship('Comment', backref='note', lazy=True)
 
 class Comment(db.Model):
@@ -69,7 +69,6 @@ class Comment(db.Model):
     note_id = db.Column(db.Integer, db.ForeignKey('project_note.id', ondelete='CASCADE'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    user = db.relationship('User', backref=db.backref('comments', lazy=True))
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -132,10 +131,12 @@ def project_details(project_id):
         if len(content) > 200:  # Backend karakter sınırı kontrolü
             flash('Note content exceeds the maximum allowed length of 200 characters.')
             return redirect(url_for('project_details', project_id=project_id))
-        new_note = ProjectNote(content=content, project_id=project.id, user_id=current_user.id)
-        db.session.add(new_note)
-        db.session.commit()
-        return redirect(url_for('project_details', project_id=project_id))
+        
+        if content:  # content kontrolü ekleyin
+            new_note = ProjectNote(content=content, project_id=project.id, user_id=current_user.id)
+            db.session.add(new_note)
+            db.session.commit()
+            return redirect(url_for('project_details', project_id=project_id))
     return render_template('project_details.html', project=project)
 
 @app.route('/delete_note/<int:note_id>', methods=['POST'])

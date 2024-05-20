@@ -42,7 +42,7 @@
         <form action="{{ url_for('add_project') }}" method="POST">
             <div class="form-group">
                 <label for="name">Project Name</label>
-                <input type="text" class="form-control" id="name" name="name" required>
+                <input type="text" class="form-control" id="name" name="name" required maxlength="200">
             </div>
             
             <div class="form-group">
@@ -72,5 +72,18 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const textAreas = document.querySelectorAll('textarea, input[type="text"]');
+
+            textAreas.forEach(textArea => {
+                textArea.addEventListener('input', () => {
+                    if (textArea.value.length > 200) {
+                        textArea.value = textArea.value.slice(0, 200);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

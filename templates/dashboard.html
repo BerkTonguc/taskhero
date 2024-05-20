@@ -44,6 +44,12 @@
             background-color: #dc3545;
             color: white;
         }
+        .project-name {
+            max-width: 200px; /* Proje adının maksimum genişliği */
+            white-space: nowrap; /* Metni tek satırda tut */
+            overflow: hidden; /* Taşan metni gizle */
+            text-overflow: ellipsis; /* Taşan metni '...' ile belirt */
+        }
     </style>
 </head>
 <body>
@@ -72,8 +78,8 @@
                 {% set days_remaining = (project.end_date - current_date).days %}
                 <tr class="{% if days_remaining < 7 %}table-danger{% endif %}">
                     <td>
-                        <a href="{{ url_for('project_details', project_id=project.id) }}">
-                            {{ project.name }} 
+                        <a href="{{ url_for('project_details', project_id=project.id) }}" class="project-name">
+                            {{ project.name }}
                             {% if days_remaining < 0 %}
                             <span class="badge badge-danger">Teslim Süresi Geçti</span>
                             {% elif days_remaining < 7 %}

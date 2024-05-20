@@ -39,6 +39,9 @@ li {
     align-items: center;
     transition: background 0.3s;
     word-break: break-word; /* Uzun kelimelerin kırılması */
+    overflow: hidden; /* Taşan metni gizle */
+    text-overflow: ellipsis; /* Taşan metni '...' ile belirt */
+    white-space: nowrap; /* Metni tek satırda tut */
 }
 
 li:hover {
@@ -139,6 +142,9 @@ a:hover {
     margin-bottom: 10px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     word-break: break-word; /* Uzun kelimelerin kırılması */
+    overflow: hidden; /* Taşan metni gizle */
+    text-overflow: ellipsis; /* Taşan metni '...' ile belirt */
+    white-space: nowrap; /* Metni tek satırda tut */
 }
 
 .comment-list {
@@ -164,6 +170,9 @@ a:hover {
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     width: 100%;
     word-break: break-word; /* Uzun kelimelerin kırılması */
+    overflow: hidden; /* Taşan metni gizle */
+    text-overflow: ellipsis; /* Taşan metni '...' ile belirt */
+    white-space: nowrap; /* Metni tek satırda tut */
 }
 
 .comment-form {
@@ -194,6 +203,9 @@ a:hover {
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     width: 100%;
     word-break: break-word; /* Uzun kelimelerin kırılması */
+    overflow: hidden; /* Taşan metni gizle */
+    text-overflow: ellipsis; /* Taşan metni '...' ile belirt */
+    white-space: nowrap; /* Metni tek satırda tut */
 }
 
 .comment-content {
@@ -211,4 +223,11 @@ a:hover {
 .comment-content.expanded {
     white-space: normal; /* Genişletildiğinde metni normal şekilde gösterir */
     max-width: none; /* Genişletildiğinde genişlik sınırlamasını kaldırır */
+}
+
+.project-name {
+    max-width: 200px; /* Proje adının maksimum genişliği */
+    white-space: nowrap; /* Metni tek satırda tut */
+    overflow: hidden; /* Taşan metni gizle */
+    text-overflow: ellipsis; /* Taşan metni '...' ile belirt */
 }
