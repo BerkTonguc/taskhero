@@ -66,7 +66,7 @@ class ProjectNote(db.Model):
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text, nullable=False)
-    note_id = db.Column(db.Integer, db.ForeignKey('project_note.id'), nullable=False)
+    note_id = db.Column(db.Integer, db.ForeignKey('project_note.id', ondelete='CASCADE'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     user = db.relationship('User', backref=db.backref('comments', lazy=True))
@@ -102,7 +102,8 @@ def logout():
 @login_required
 def dashboard():
     projects = Project.query.all()
-    return render_template('dashboard.html', projects=projects)
+    current_date = datetime.now().date()
+    return render_template('dashboard.html', projects=projects, current_date=current_date)
 
 @app.route('/add_project', methods=['GET', 'POST'])
 @login_required
@@ -128,6 +129,9 @@ def project_details(project_id):
     project = Project.query.get_or_404(project_id)
     if request.method == 'POST' and current_user.role == 'admin':
         content = request.form.get('note')
+        if len(content) > 200:  # Backend karakter sınırı kontrolü
+            flash('Note content exceeds the maximum allowed length of 200 characters.')
+            return redirect(url_for('project_details', project_id=project_id))
         new_note = ProjectNote(content=content, project_id=project.id, user_id=current_user.id)
         db.session.add(new_note)
         db.session.commit()
@@ -141,6 +145,11 @@ def delete_note(note_id):
     if current_user.role != 'admin':
         return redirect(url_for('dashboard'))
     project_id = note.project_id
+
+    # Önce note ile ilişkili tüm yorumları sil
+    for comment in note.comments:
+        db.session.delete(comment)
+
     db.session.delete(note)
     db.session.commit()
     return redirect(url_for('project_details', project_id=project_id))
@@ -150,6 +159,9 @@ def delete_note(note_id):
 def add_comment(note_id):
     note = ProjectNote.query.get_or_404(note_id)
     content = request.form.get('comment')
+    if len(content) > 200:  # Backend karakter sınırı kontrolü
+        flash('Comment content exceeds the maximum allowed length of 200 characters.')
+        return redirect(url_for('project_details', project_id=note.project_id))
     new_comment = Comment(content=content, note_id=note.id, user_id=current_user.id)
     db.session.add(new_comment)
     db.session.commit()
@@ -174,6 +186,9 @@ def add_step(project_id):
     if request.method == 'POST':
         name = request.form.get('name')
         note = request.form.get('note')
+        if len(note) > 200:  # Backend karakter sınırı kontrolü
+            flash('Step note content exceeds the maximum allowed length of 200 characters.')
+            return redirect(url_for('add_step', project_id=project.id))
         new_step = Step(name=name, note=note, project_id=project.id)
         db.session.add(new_step)
         db.session.commit()

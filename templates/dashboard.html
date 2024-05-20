@@ -33,6 +33,17 @@
         .btn-delete:hover {
             text-decoration: underline;
         }
+        .table-danger {
+            background-color: #f8d7da;
+        }
+        .badge-warning {
+            background-color: #ffc107;
+            color: white;
+        }
+        .badge-danger {
+            background-color: #dc3545;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -58,8 +69,18 @@
             </thead>
             <tbody>
                 {% for project in projects %}
-                <tr>
-                    <td><a href="{{ url_for('project_details', project_id=project.id) }}">{{ project.name }}</a></td>
+                {% set days_remaining = (project.end_date - current_date).days %}
+                <tr class="{% if days_remaining < 7 %}table-danger{% endif %}">
+                    <td>
+                        <a href="{{ url_for('project_details', project_id=project.id) }}">
+                            {{ project.name }} 
+                            {% if days_remaining < 0 %}
+                            <span class="badge badge-danger">Teslim Süresi Geçti</span>
+                            {% elif days_remaining < 7 %}
+                            <span class="badge badge-warning">Son 1 Hafta</span>
+                            {% endif %}
+                        </a>
+                    </td>
                     <td>{{ project.start_date.strftime('%Y-%m-%d') }}</td>
                     <td>{{ project.end_date.strftime('%Y-%m-%d') }}</td>
                     <td id="completion-{{ project.id }}">{{ project.completed_steps }}/{{ project.total_steps }}</td>

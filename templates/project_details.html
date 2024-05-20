@@ -6,181 +6,7 @@
     <title>Project Details - {{ project.name }}</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .container {
-            width: 100%;
-            max-width: 800px;
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        h1, h2 {
-            color: #333;
-            text-align: center;
-        }
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-        li {
-            padding: 15px;
-            margin: 10px 0;
-            background: #e9ecef;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: background 0.3s;
-        }
-        li:hover {
-            background: #dee2e6;
-        }
-        .btn, .btn-delete, .btn-success, .btn-danger {
-            display: inline-block;
-            margin-left: 10px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            text-align: center;
-            transition: background 0.3s;
-        }
-        .btn-success {
-            background-color: #28a745;
-        }
-        .btn-danger {
-            background-color: #dc3545;
-        }
-        .btn:hover, .btn-delete:hover, .btn-success:hover, .btn-danger:hover {
-            opacity: 0.9;
-        }
-        .btn-delete {
-            background-color: #ff4444;
-        }
-        .btn-delete:hover {
-            background-color: #cc0000;
-        }
-        a {
-            color: #007bff;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        a:hover {
-            color: #0056b3;
-            text-decoration: underline;
-        }
-        .action-buttons {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .action-buttons a {
-            margin-right: 10px;
-        }
-        .project-users {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .project-notes {
-            margin-top: 20px;
-        }
-        .project-notes form {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .project-notes form textarea {
-            width: 70%;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            margin-right: 10px;
-        }
-        .project-notes ul {
-            list-style: none;
-            padding: 0;
-        }
-        .project-notes li {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: flex-start;
-            padding: 15px;
-            background: #e9ecef;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .comment-list {
-            list-style: none;
-            padding: 0;
-            margin-top: 10px;
-            display: none;
-            width: 100%;
-        }
-        .comment-list.expanded {
-            display: block;
-        }
-        .comment-list li {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            background: #f0f2f5;
-            border-radius: 8px;
-            margin-bottom: 5px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            width: 100%;
-        }
-        .comment-form {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 10px;
-            width: 100%;
-        }
-        .comment-form textarea {
-            width: 70%;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            margin-right: 10px;
-        }
-        .comment {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            background: #f0f2f5;
-            border-radius: 8px;
-            margin-bottom: 5px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            width: 100%;
-        }
-        .comment-content {
-            max-height: 20px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: max-height 0.3s ease;
-        }
-        .comment-content.expanded {
-            max-height: none;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
@@ -197,14 +23,16 @@
         <ul id="steps-list">
             {% for step in project.steps %}
             <li id="step-{{ step.id }}">
-                {{ step.name }} - {% if step.note %}{{ step.note }}{% else %}No Notes{% endif %}
-                <div>
-                    <button class="btn {% if step.completed %}btn-success{% else %}btn-danger{% endif %}" onclick="toggleCompletion({{ project.id }}, {{ step.id }})">
-                        {% if step.completed %}Completed{% else %}Not Completed{% endif %}
-                    </button>
-                    <form action="{{ url_for('delete_step', project_id=project.id, step_id=step.id) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this step?');" style="display: inline;">
-                        <button type="submit" class="btn-delete">Delete Step</button>
-                    </form>
+                <div class="step-content">
+                    <span class="step-name">{{ step.name }} - {% if step.note %}{{ step.note }}{% else %}No Notes{% endif %}</span>
+                    <div>
+                        <button class="btn {% if step.completed %}btn-success{% else %}btn-danger{% endif %}" onclick="toggleCompletion({{ project.id }}, {{ step.id }})">
+                            {% if step.completed %}Completed{% else %}Not Completed{% endif %}
+                        </button>
+                        <form action="{{ url_for('delete_step', project_id=project.id, step_id=step.id) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this step?');" style="display: inline;">
+                            <button type="submit" class="btn-delete">Delete Step</button>
+                        </form>
+                    </div>
                 </div>
             </li>
             {% endfor %}
@@ -217,7 +45,7 @@
             <h2>Project Notes:</h2>
             {% if current_user.role == 'admin' %}
             <form action="{{ url_for('project_details', project_id=project.id) }}" method="POST">
-                <textarea name="note" rows="2" required></textarea>
+                <textarea name="note" rows="2" required maxlength="200"></textarea>
                 <button type="submit" class="btn btn-primary">Add Note</button>
             </form>
             {% endif %}
@@ -243,7 +71,7 @@
                         </li>
                         {% endfor %}
                         <form action="{{ url_for('add_comment', note_id=note.id) }}" method="POST" class="comment-form">
-                            <textarea name="comment" rows="1" required></textarea>
+                            <textarea name="comment" rows="1" required maxlength="200"></textarea>
                             <button type="submit" class="btn btn-primary">Add Comment</button>
                         </form>
                     </ul>
@@ -253,6 +81,18 @@
         </div>
     </div>
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const textAreas = document.querySelectorAll('textarea');
+
+            textAreas.forEach(textArea => {
+                textArea.addEventListener('input', () => {
+                    if (textArea.value.length > 200) {
+                        textArea.value = textArea.value.slice(0, 200);
+                    }
+                });
+            });
+        });
+
         function toggleCompletion(projectId, stepId) {
             fetch(`/toggle_step_completion/${projectId}/${stepId}`, { method: 'POST' })
             .then(response => response.json())
